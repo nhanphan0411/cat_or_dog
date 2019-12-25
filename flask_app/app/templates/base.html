@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>CatOrDog</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="static/css/style.css" rel="stylesheet">
+</head>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{url_for('home_page.index')}}">CAT OR DOG?</a>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                <a class="nav-link" href="https://github.com/nhanphan0411">Find me on GitHub
+                    <span class="sr-only">(current)</span>
+                </a>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+
+<body class="text-center">
+      
+    {% block content%} {% endblock %}
+
+    <script src="static/js/jquery-3.4.1.min.js"></script>
+    <script src="static/js/index.js"></script>
+    
+    <!-- AJAX optional Get Image-->
+    <!-- <script type="text/javascript">
+        $("#myButton").click(function(){
+            $('#result').text('  Predicting...');
+            var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+            var canvasObj = document.getElementById("myImg");
+            var img = canvasObj.toDataURL('image/jpeg');
+            $.ajax({
+                type: "POST",
+                url: $SCRIPT_ROOT + "/upload/",
+                data: img,
+                success: function(data){
+                    $('#result').text('Predictions ' + data);
+                }
+            });
+        });
+    </script> -->
+    
+    <!-- UPLOAD PHOTO -->
+    <script type="text/javascript">
+        /* The uploader form */
+        $(function () {
+            $(":file").change(function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+    
+                    reader.onload = imageIsLoaded;
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        });
+    
+        function imageIsLoaded(e) {
+            $('#myImg').attr('src', e.target.result);
+            $('#yourImage').attr('src', e.target.result);
+        };
+
+    </script>
+
+    <!-- AJAX optional WrongFeedback-->
+    <script type="text/javascript">
+        $("#myFeedbackButton").click(function(){
+            
+            var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+            var predict = document.getElementById('result').textContent.split(" ").slice(-2)[0];
+            var img = document.getElementById('blah').src.split("/").pop()
+            var datastr = predict + " " + img
+            $.ajax({
+                type: "POST",
+                url: $SCRIPT_ROOT + "/upload",
+                contentType: "application/json",
+                data: JSON.stringify(datastr),
+                success: function(){
+                    $('#result').text('Thank you for your feedback!');
+                }
+            });
+        });
+    </script>
+
+    <!-- TrueFeedback -->
+        <script type="text/javascript">
+            $("#TrueButton").click(function(){
+                $('#result').text('YAY!');
+            });
+        </script>
+    </body>
+
+<!-- Footer -->
+  <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
+        <div class="container text-center">
+        <small>Copyright &copy; Mariana 2019</small>
+        </div>
+    </footer>
+
+</html>
